@@ -26,6 +26,17 @@ Add the following dependency to your `pom.xml`:
 </dependency>
 ```
 
+## application.properties
+Add the following properties to your `application.properties` file in the Config Server project:
+
+```properties
+server.port=8888
+spring.cloud.config.server.git.uri=<your-git-repo-uri>
+spring.cloud.config.server.git.clone-on-start=true
+spring.cloud.config.server.git.username=<git-username>
+spring.cloud.config.server.git.password=<git-personal-access-token>
+```
+
 ## Main Application Class
 
 Enable Config Server in your main application class:
