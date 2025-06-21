@@ -8,6 +8,27 @@
     <version>0.1.0</version>
     <packaging>pom</packaging>
 
+    <url>https://github.com/ThejMal01/food-order-system.git</url>
+    <licenses>
+        <license>
+            <name>MIT License</name>
+            <url>https://opensource.org/licenses/MIT</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+    <developers>
+        <developer>
+            <id>ThejMal01</id>
+            <name>Thejani Mallawaarachchi</name>
+            <email>thejani.mallawaarachchi@gmail.com</email>
+        </developer>
+        <developer>
+            <id>Silverviles</id>
+            <name>Tharindu Siriwardhana</name>
+            <email>sudarakatharindu2001@gmail.com</email>
+        </developer>
+    </developers>
+
     <properties>
         <java.version>21</java.version>
         <spring-boot.version>3.5.0</spring-boot.version>
