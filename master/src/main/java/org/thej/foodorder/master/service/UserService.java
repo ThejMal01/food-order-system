@@ -1,4 +1,7 @@
 package org.thej.foodorder.master.service;
 
-public class UserService {
+import org.springframework.security.core.userdetails.UserDetailsService;
+
+public interface UserService extends UserDetailsService {
+
 }
