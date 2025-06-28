@@ -1,4 +1,4 @@
-package org.thej.foodorder.webcommons.dto.response;
+package org.thej.foodorder.webcommons.dto.template.response;
 
 import lombok.Data;
 import org.springframework.http.HttpStatus;

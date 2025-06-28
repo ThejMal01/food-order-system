@@ -1,4 +1,4 @@
-package org.thej.foodorder.webcommons.dto.request;
+package org.thej.foodorder.webcommons.dto.template.request;
 
 import lombok.Data;
 

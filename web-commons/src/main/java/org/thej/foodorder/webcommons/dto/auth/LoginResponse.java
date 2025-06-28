@@ -1,4 +1,4 @@
-package org.thej.foodorder.auth.dto;
+package org.thej.foodorder.webcommons.dto.auth;
 
 import lombok.Data;
 import org.thej.foodorder.master.dao.Privilege;

@@ -1,4 +1,4 @@
-package org.thej.foodorder.auth.service;
+package org.thej.foodorder.webcommons.service;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -8,11 +8,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
-import org.thej.foodorder.auth.dto.LoginResponse;
+import org.thej.foodorder.master.dao.Role;
+import org.thej.foodorder.webcommons.dto.auth.LoginResponse;
 
 import javax.crypto.SecretKey;
-import java.time.LocalDate;
-import java.time.ZoneId;
+import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -39,8 +39,12 @@ public class JwtService {
         return extractClaim(token, Claims::getExpiration);
     }
 
-    public String extractRole(String token) {
-        return extractClaim(token, claims -> claims.get("role", String.class));
+    public Object extractRoles(String token) {
+        return extractAllClaims(token).get("roles");
+    }
+
+    public Object extractPrivileges(String token) {
+        return extractAllClaims(token).get("privileges");
     }
 
     public <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
@@ -61,9 +65,8 @@ public class JwtService {
                 .getPayload();
     }
 
-    private Boolean isTokenExpired(String token) {
-        Date expirationDate = extractExpiration(token);
-        return expirationDate.isBefore(Date.now());
+    public Boolean isTokenExpired(String token) {
+        return extractExpiration(token).before(new Date());
     }
 
     private String createToken(Map<String, Object> claims, LoginResponse loginResponse) {
@@ -73,7 +76,7 @@ public class JwtService {
 
         claims.put("userId", loginResponse.getUserId());
         claims.put("username", loginResponse.getUsername());
-        claims.put("role", loginResponse.getRoles());
+        claims.put("roles", loginResponse.getRoles());
         claims.put("privileges", loginResponse.getPrivileges());
 
         return Jwts.builder()
