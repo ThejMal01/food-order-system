@@ -74,7 +74,19 @@
         <dependencies>
             <dependency>
                 <groupId>org.thej</groupId>
+                <artifactId>master</artifactId>
+                <version>${project.version}</version>
+                <scope>compile</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.thej</groupId>
                 <artifactId>commons</artifactId>
+                <version>${project.version}</version>
+                <scope>compile</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.thej</groupId>
+                <artifactId>web-commons</artifactId>
                 <version>${project.version}</version>
                 <scope>compile</scope>
             </dependency>
@@ -89,6 +101,11 @@
             <dependency>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-starter-web</artifactId>
+                <version>${spring-boot.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-starter-webflux</artifactId>
                 <version>${spring-boot.version}</version>
             </dependency>
             <dependency>
