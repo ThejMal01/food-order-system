@@ -1,4 +1,4 @@
-package org.thej.foodorder.webcommons.dto.template.response;
+package org.thej.foodorder.master.dto.template.response;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;

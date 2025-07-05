@@ -1,4 +1,4 @@
-package org.thej.foodorder.webcommons.service;
+package org.thej.foodorder.master.service.impl;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -8,9 +8,14 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
+import org.thej.foodorder.master.dao.Privilege;
+import org.thej.foodorder.master.dao.Role;
+import org.thej.foodorder.master.dao.User;
 import org.thej.foodorder.master.dto.auth.LoginResponse;
+import org.thej.foodorder.master.dto.auth.RegisterResponse;
 
 import javax.crypto.SecretKey;
+import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -19,15 +24,10 @@ import java.util.function.Function;
 @Service
 @Slf4j
 public class JwtService {
-    @Value("${jwt.secret}")
+    @Value("q+UCdvuvFiI+1iFmHynmyGOMlyZtZK9SuEdsNvqHheo=")
     private String SECRET;
-    @Value("${jwt.expiration}")
+    @Value("3600")
     private Long EXPIRATION;
-
-
-    public String generateToken(LoginResponse loginResponse) {
-        return createToken(new HashMap<>(), loginResponse);
-    }
 
     public String extractUsername(String token) {
         return extractClaim(token, Claims::getSubject);
@@ -67,19 +67,21 @@ public class JwtService {
         return extractExpiration(token).before(new Date());
     }
 
-    private String createToken(Map<String, Object> claims, LoginResponse loginResponse) {
+    public String generateToken(User user) {
         if (EXPIRATION == null || SECRET == null) {
             throw new IllegalStateException("JWT configuration missing");
         }
 
-        claims.put("userId", loginResponse.getUserId());
-        claims.put("username", loginResponse.getUsername());
-        claims.put("roles", loginResponse.getRoles());
-        claims.put("privileges", loginResponse.getPrivileges());
+        Map<String, Object> claims = new HashMap<>();
+
+        claims.put("userId", user.getId());
+        claims.put("username", user.getUsername());
+        claims.put("roles", user.getRoles());
+        claims.put("privileges", user.getPrivileges());
 
         return Jwts.builder()
                 .claims(claims)
-                .subject(loginResponse.getUsername())
+                .subject(user.getUsername())
                 .issuedAt(new Date())
                 .expiration(new Date(System.currentTimeMillis() + EXPIRATION))
                 .signWith(getSigningKey())

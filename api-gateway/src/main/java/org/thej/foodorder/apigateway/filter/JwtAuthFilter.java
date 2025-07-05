@@ -13,7 +13,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.server.ServerWebExchange;
 import org.springframework.web.server.WebFilter;
 import org.springframework.web.server.WebFilterChain;
-import org.thej.foodorder.webcommons.service.JwtService;
+import org.thej.foodorder.master.service.impl.JwtService;
 import reactor.core.publisher.Mono;
 
 import java.util.Collections;

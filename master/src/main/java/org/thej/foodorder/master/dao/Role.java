@@ -18,6 +18,7 @@ public class Role {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String roleName;
+    private String roleDescription;
     @ManyToMany(mappedBy = "roles")
     private Collection<User> users;
     @ManyToMany

@@ -1,4 +1,4 @@
-package org.thej.foodorder.webcommons.dto.template.request;
+package org.thej.foodorder.master.dto.template.request;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

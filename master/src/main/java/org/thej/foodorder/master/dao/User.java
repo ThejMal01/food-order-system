@@ -10,6 +10,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.stream.Stream;
 
 @Entity
 @Getter
@@ -33,8 +34,21 @@ public class User {
 
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return roles.stream()
-                .flatMap(r -> r.getPrivileges().stream())
-                .map(privilege -> (GrantedAuthority) privilege::getPrivilegeName)
+                .flatMap(role -> {
+                    Stream<GrantedAuthority> roleAuthority = Stream.of(
+                            (GrantedAuthority) () -> "ROLE_" + role.getRoleName()
+                    );
+                    Stream<GrantedAuthority> privilegeAuthorities = role.getPrivileges().stream()
+                            .map(privilege -> (GrantedAuthority) privilege::getPrivilegeName);
+                    return Stream.concat(roleAuthority, privilegeAuthorities);
+                })
+                .toList();
+    }
+
+    public Collection<Privilege> getPrivileges() {
+        return roles.stream()
+                .flatMap(role -> role.getPrivileges().stream())
+                .distinct()
                 .toList();
     }
 }

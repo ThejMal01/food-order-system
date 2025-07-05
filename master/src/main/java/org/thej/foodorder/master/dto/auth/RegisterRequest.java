@@ -1,8 +1,8 @@
-package org.thej.foodorder.webcommons.dto.auth;
+package org.thej.foodorder.master.dto.auth;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import org.thej.foodorder.webcommons.dto.template.request.BaseRequest;
+import org.thej.foodorder.master.dto.template.request.BaseRequest;
 
 @EqualsAndHashCode(callSuper = false)
 @Data
