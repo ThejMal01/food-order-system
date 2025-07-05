@@ -9,17 +9,21 @@ import java.util.List;
 public class CustomException extends RuntimeException {
     private final List<CustomExceptionDetails> errors = new ArrayList<>();
 
-    public CustomException(String errorCode, String errorMessage) {
-        super(errorMessage);
-        this.errors.add(new CustomExceptionDetails(errorCode, errorMessage));
+    public CustomException(ErrorCode errorCode) {
+        super(errorCode.getMessage());
+        this.errors.add(new CustomExceptionDetails(errorCode));
     }
 
-    public void addError(String errorCode, String errorMessage) {
-        this.errors.add(new CustomExceptionDetails(errorCode, errorMessage));
+    public void addError(ErrorCode errorCode) {
+        this.errors.add(new CustomExceptionDetails(errorCode));
     }
 
     public void addErrors(List<CustomExceptionDetails> errorDetails) {
         this.errors.addAll(errorDetails);
+    }
+
+    public void removeError(ErrorCode errorCode) {
+        this.errors.removeIf(error -> error.getErrorCode().equals(errorCode.getCode()));
     }
 
     @Getter
@@ -31,6 +35,12 @@ public class CustomException extends RuntimeException {
         public CustomExceptionDetails(String errorCode, String errorMessage) {
             this.errorCode = errorCode;
             this.errorMessage = errorMessage;
+            this.timestamp = java.time.Instant.now().toString();
+        }
+
+        public CustomExceptionDetails(ErrorCode errorCode){
+            this.errorCode = errorCode.getCode();
+            this.errorMessage = errorCode.getMessage();
             this.timestamp = java.time.Instant.now().toString();
         }
     }
