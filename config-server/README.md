@@ -2,7 +2,8 @@
 
 ## Overview
 
-This guide demonstrates how to configure Spring Cloud Config Server to connect with a Git repository for centralized configuration management using `application.properties`.
+This guide demonstrates how to configure Spring Cloud Config Server to connect with a Git repository for centralized
+configuration management using `application.properties`.
 
 ## Prerequisites
 
@@ -27,6 +28,7 @@ Add the following dependency to your `pom.xml`:
 ```
 
 ## application.properties
+
 Add the following properties to your `application.properties` file in the Config Server project:
 
 ```properties
@@ -130,18 +132,21 @@ config-repo/
 ## Configuration File Naming Convention
 
 Spring Cloud Config follows this naming pattern:
+
 - `{application}-{profile}.properties`
 - `{application}.properties`
 - `application-{profile}.properties`
 - `application.properties`
 
 Examples:
+
 - `user-service-dev.properties` (user-service application, dev profile)
 - `application-prod.properties` (all applications, prod profile)
 
 ## Testing the Configuration
 
 ### Start the Config Server
+
 ```bash
 mvn spring-boot:run
 # or
@@ -182,6 +187,7 @@ spring.cloud.config.retry.max-attempts=3
 ## Security Configuration (Optional)
 
 ### Basic Authentication
+
 ```properties
 # Config Server
 spring.security.user.name=config-user
@@ -208,18 +214,23 @@ curl http://localhost:8888/actuator/env
 ## Common Issues and Solutions
 
 ### Issue 1: Repository Not Found
+
 ```
 Error: Cannot clone or checkout repository
 ```
+
 **Solution**: Verify repository URL and authentication credentials.
 
 ### Issue 2: SSH Key Issues
+
 ```
 Error: Auth fail
 ```
+
 **Solution**: Ensure SSH keys are properly configured or use HTTPS with tokens.
 
 ### Issue 3: Configuration Not Refreshing
+
 **Solution**: Enable `spring.cloud.config.server.git.force-pull=true` or implement webhook notifications.
 
 ## Best Practices
@@ -259,4 +270,6 @@ docker run -p 8888:8888 \
 
 ## Conclusion
 
-This setup provides a robust, centralized configuration management solution using Spring Cloud Config Server with Git backend. The configuration supports multiple environments, applications, and deployment scenarios while maintaining security and flexibility.
+This setup provides a robust, centralized configuration management solution using Spring Cloud Config Server with Git
+backend. The configuration supports multiple environments, applications, and deployment scenarios while maintaining
+security and flexibility.

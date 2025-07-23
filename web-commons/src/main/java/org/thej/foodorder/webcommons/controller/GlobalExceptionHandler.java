@@ -5,7 +5,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.thej.foodorder.commons.exception.CustomException;
-import org.thej.foodorder.webcommons.dto.response.ApiResponse;
+import org.thej.foodorder.master.dto.template.response.ApiResponse;
 
 import java.util.List;
 

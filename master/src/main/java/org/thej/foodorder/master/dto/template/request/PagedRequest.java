@@ -1,9 +1,8 @@
-package org.thej.foodorder.webcommons.dto.request;
+package org.thej.foodorder.master.dto.template.request;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
-import java.util.List;
 import java.util.Map;
 
 @Getter

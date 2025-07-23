@@ -1,13 +1,11 @@
-package org.thej.foodorder.webcommons.dto.request;
+package org.thej.foodorder.master.dto.template.request;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
 
 @Data
 public class BaseRequest {
     private String requestId;
     private String timestamp;
-
     public BaseRequest() {
         this.requestId = generateRequestId();
         this.timestamp = getCurrentTimestamp();
