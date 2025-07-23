@@ -6,7 +6,6 @@ import lombok.Data;
 public class BaseRequest {
     private String requestId;
     private String timestamp;
-
     public BaseRequest() {
         this.requestId = generateRequestId();
         this.timestamp = getCurrentTimestamp();
