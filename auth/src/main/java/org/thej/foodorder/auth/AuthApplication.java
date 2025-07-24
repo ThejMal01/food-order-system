@@ -11,6 +11,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 @EnableDiscoveryClient
 @ComponentScan(basePackages = {
         "org.thej.foodorder.master",
+        "org.thej.foodorder.auth",
 })
 @EnableJpaRepositories(basePackages = {"org.thej.foodorder.master.repository"})
 @EntityScan(basePackages = "org.thej.foodorder.master.dao")
