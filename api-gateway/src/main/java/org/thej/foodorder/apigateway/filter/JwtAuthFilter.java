@@ -18,6 +18,7 @@ import reactor.core.publisher.Mono;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.regex.Pattern;
 
 @Component
 @RequiredArgsConstructor
@@ -25,8 +26,20 @@ public class JwtAuthFilter implements WebFilter {
 
     private final JwtService jwtService;
 
+    private static final List<Pattern> PUBLIC_PATTERNS = List.of(
+            Pattern.compile(".*/actuator/.*"),
+            Pattern.compile("/auth/.*")
+    );
+
     @Override
     public Mono<Void> filter(@NonNull ServerWebExchange exchange, @NonNull WebFilterChain chain) {
+        String path = exchange.getRequest().getURI().getPath();
+
+        // Skip JWT check for public endpoints
+        if (PUBLIC_PATTERNS.stream().anyMatch(pattern -> pattern.matcher(path).matches())) {
+            return chain.filter(exchange);
+        }
+
         String authHeader = exchange.getRequest().getHeaders().getFirst(HttpHeaders.AUTHORIZATION);
 
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
@@ -57,5 +70,4 @@ public class JwtAuthFilter implements WebFilter {
         return chain.filter(exchange)
                 .contextWrite(ReactiveSecurityContextHolder.withSecurityContext(Mono.just(new SecurityContextImpl(auth))));
     }
-
 }
