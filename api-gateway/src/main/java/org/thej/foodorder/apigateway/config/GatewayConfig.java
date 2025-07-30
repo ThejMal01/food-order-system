@@ -12,7 +12,7 @@ public class GatewayConfig {
         return builder.routes()
                 .route("auth", r -> r.path("/auth/**")
                         .filters(f -> f.stripPrefix(1))
-                        .uri("lb://AUTH"))
+                        .uri("lb://auth"))
                 .build();
     }
 }
