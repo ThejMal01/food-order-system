@@ -8,14 +8,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
-import org.thej.foodorder.master.dao.Privilege;
-import org.thej.foodorder.master.dao.Role;
 import org.thej.foodorder.master.dao.User;
-import org.thej.foodorder.master.dto.auth.LoginResponse;
-import org.thej.foodorder.master.dto.auth.RegisterResponse;
 
 import javax.crypto.SecretKey;
-import java.util.Collection;
+import java.time.Instant;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -24,9 +20,9 @@ import java.util.function.Function;
 @Service
 @Slf4j
 public class JwtService {
-    @Value("q+UCdvuvFiI+1iFmHynmyGOMlyZtZK9SuEdsNvqHheo=")
+    @Value("${jwt.secret}")
     private String SECRET;
-    @Value("3600")
+    @Value("${jwt.expiration}")
     private Long EXPIRATION;
 
     public String extractUsername(String token) {
@@ -64,7 +60,7 @@ public class JwtService {
     }
 
     public Boolean isTokenExpired(String token) {
-        return extractExpiration(token).before(new Date());
+        return extractExpiration(token).toInstant().isBefore(Instant.now());
     }
 
     public String generateToken(User user) {
@@ -83,7 +79,7 @@ public class JwtService {
                 .claims(claims)
                 .subject(user.getUsername())
                 .issuedAt(new Date())
-                .expiration(new Date(System.currentTimeMillis() + EXPIRATION))
+                .expiration(new Date(System.currentTimeMillis() + EXPIRATION * 1000))
                 .signWith(getSigningKey())
                 .compact();
     }
@@ -92,7 +88,6 @@ public class JwtService {
         try {
             return Keys.hmacShaKeyFor(Decoders.BASE64.decode(SECRET));
         } catch (IllegalArgumentException e) {
-
             log.error("Invalid JWT Secret: must be base64-encoded");
             throw new IllegalStateException("Invalid JWT secret format", e);
         }

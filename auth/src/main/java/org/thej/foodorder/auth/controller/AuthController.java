@@ -28,22 +28,4 @@ public class AuthController {
         LoginResponse loginResponse = userService.login(loginRequest);
         return new ApiResponse<>(HttpStatus.OK, "Login successful", loginResponse);
     }
-
-    @GetMapping("/public")
-    @PreAuthorize("hasRole('USER')")
-    public ApiResponse<String> publicEndpoint() {
-        return new ApiResponse<>(HttpStatus.OK, "This is a public endpoint", "Public data");
-    }
-
-    @GetMapping("/role")
-    @PreAuthorize("hasRole('ADMIN')")
-    public ApiResponse<String> roleEndpoint() {
-        return new ApiResponse<>(HttpStatus.OK, "This is a role-based endpoint", "Role data");
-    }
-
-    @GetMapping("/privilege")
-    @PreAuthorize("hasAuthority('PRIVILEGE_VIEW')")
-    public ApiResponse<String> privilegeEndpoint() {
-        return new ApiResponse<>(HttpStatus.OK, "This is a privilege-based endpoint", "Privilege data");
-    }
 }
