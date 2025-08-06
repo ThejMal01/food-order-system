@@ -1,60 +1,49 @@
-package org.thej.foodorder.apigateway.filter;
+package org.thej.foodorder.restaurants.filter;
 
+import jakarta.servlet.FilterChain;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.apache.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.context.ReactiveSecurityContextHolder;
-import org.springframework.security.core.context.SecurityContextImpl;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Component;
-import org.springframework.web.server.ServerWebExchange;
-import org.springframework.web.server.WebFilter;
-import org.springframework.web.server.WebFilterChain;
+import org.springframework.web.filter.OncePerRequestFilter;
 import org.thej.foodorder.master.service.impl.JwtService;
-import reactor.core.publisher.Mono;
 
+import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 @Component
 @RequiredArgsConstructor
-public class JwtAuthFilter implements WebFilter {
-
+public class JwtAuthFilter extends OncePerRequestFilter {
     private final JwtService jwtService;
 
-    private static final List<Pattern> PUBLIC_PATTERNS = List.of(
-            Pattern.compile(".*/actuator/.*"),
-            Pattern.compile("/auth/.*")
-    );
-
     @Override
-    public Mono<Void> filter(@NonNull ServerWebExchange exchange, @NonNull WebFilterChain chain) {
-        String path = exchange.getRequest().getURI().getPath();
-
-        // Skip JWT check for public endpoints
-        if (PUBLIC_PATTERNS.stream().anyMatch(pattern -> pattern.matcher(path).matches())) {
-            return chain.filter(exchange);
-        }
-
-        String authHeader = exchange.getRequest().getHeaders().getFirst(HttpHeaders.AUTHORIZATION);
+    protected void doFilterInternal(HttpServletRequest request, @NonNull HttpServletResponse response,
+                                    @NonNull FilterChain filterChain) throws ServletException, IOException {
+        String authHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
 
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
-            exchange.getResponse().setStatusCode(HttpStatus.UNAUTHORIZED);
-            return exchange.getResponse().setComplete();
+            response.setStatus(HttpStatus.UNAUTHORIZED.value());
+            response.getWriter().write("Unauthorized");
+            return;
         }
 
         String token = authHeader.substring(7);
 
         if (jwtService.isTokenExpired(token)) {
-            exchange.getResponse().setStatusCode(HttpStatus.UNAUTHORIZED);
-            return exchange.getResponse().setComplete();
+            response.setStatus(HttpStatus.UNAUTHORIZED.value());
+            response.getWriter().write("Token expired");
+            return;
         }
 
         String username = jwtService.extractUsername(token);
@@ -76,10 +65,11 @@ public class JwtAuthFilter implements WebFilter {
         UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(
                 new User(username, "", authorities), null, authorities);
 
+        org.springframework.security.core.context.SecurityContextHolder.getContext().setAuthentication(auth);
+
         System.out.println("Authorities for user " + username + ":");
         auth.getAuthorities().forEach(a -> System.out.println(a.getAuthority()));
 
-        return chain.filter(exchange)
-                .contextWrite(ReactiveSecurityContextHolder.withSecurityContext(Mono.just(new SecurityContextImpl(auth))));
+        filterChain.doFilter(request, response);
     }
 }

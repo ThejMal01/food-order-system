@@ -14,6 +14,7 @@ import java.util.Collection;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@Table(name = "t_privilege")
 public class Privilege {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
