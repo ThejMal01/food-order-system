@@ -2,7 +2,6 @@ package org.thej.foodorder.auth.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.thej.foodorder.master.dto.auth.LoginRequest;
 import org.thej.foodorder.master.dto.auth.LoginResponse;

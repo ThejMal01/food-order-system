@@ -1,0 +1,67 @@
+version: '3.8'
+
+services:
+#  mysql:
+#    image: mysql:8.0
+#    container_name: mysql-dev
+#    environment:
+#      MYSQL_ROOT_PASSWORD: admin123
+#      MYSQL_DATABASE: food_order
+#      MYSQL_USER: food_order_root
+#      MYSQL_PASSWORD: foodorder123
+#    ports:
+#      - "3306:3306"
+#    healthcheck:
+#      test: [ "CMD", "mysqladmin", "ping", "-password" ]
+#      interval: 10s
+#      timeout: 5s
+#      retries: 5
+
+  config-server:
+    build:
+      context: .
+      dockerfile: config-server/Dockerfile
+    ports:
+      - "8888:8888"
+    networks:
+      - backend
+
+  service-registry:
+    build:
+      context: .
+      dockerfile: service-registry/Dockerfile
+    ports:
+      - "8761:8761"
+    networks:
+      - backend
+
+  api-gateway:
+    build:
+      context: .
+      dockerfile: api-gateway/Dockerfile
+    ports:
+      - "8080:8080"
+    networks:
+      - backend
+
+  auth:
+    build:
+      context: .
+      dockerfile: auth/Dockerfile
+    ports:
+      - "8081:8081"
+    networks:
+      - backend
+
+  restaurants:
+    build:
+      context: .
+      dockerfile: restaurants/Dockerfile
+    ports:
+      - "8082:8082"
+    networks:
+      - backend
+
+networks:
+  backend:
+    driver: bridge
